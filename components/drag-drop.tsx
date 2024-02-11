@@ -126,7 +126,7 @@ export default function DragDrop() {
         return (
           <TabsContent key={index} value={header}>
             <div className="flex flex-col w-full text-center select-none bg-gray-600 rounded-lg p-10">
-              <div className="flex flex-row items-center justify-between pb-4">
+              <div className="flex flex-col md:flex-row items-center justify-between pb-4">
                 <h1 className="text-xl">
                   Get 4 correct picks for the {header}!
                 </h1>
@@ -142,7 +142,7 @@ export default function DragDrop() {
                   {picksSaved ? 'Picks Saved!' : 'Save Picks'}
                 </Button>
               </div>
-              <div className="grid grid-cols-4 gap-x-4 gap-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-x-4 gap-y-4 items-center">
                 {playoff.matches
                   .filter((match) => match.name === header)
                   .map((match, index) => {
@@ -155,7 +155,9 @@ export default function DragDrop() {
                         >
                           <div
                             key={index}
-                            className="flex flex-col p-12 border-2 items-center space-y-5 rounded-lg bg-gray-400"
+                            className={`flex flex-col p-12 border-2 items-center space-y-5 rounded-lg bg-gray-400 w-full ${
+                              picksSaved && 'border-green-500 border-4'
+                            }`}
                           >
                             <h1 className="text-xl">Match #{index + 1}</h1>
                             <div className="flex flex-row space-x-8">
