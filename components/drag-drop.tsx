@@ -157,7 +157,7 @@ export default function DragDrop() {
                             key={index}
                             className="flex flex-col p-12 border-2 items-center space-y-5 rounded-lg bg-gray-400"
                           >
-                            <h1 className="text-xl">{match.name}</h1>
+                            <h1 className="text-xl">Match #{index + 1}</h1>
                             <div className="flex flex-row space-x-8">
                               {match.participants.map((participant, index) => {
                                 return (
@@ -176,7 +176,9 @@ export default function DragDrop() {
                               <PickDroppable
                                 key={index}
                                 id={index}
-                                picks={picks}
+                                picks={picks.filter(
+                                  (pick) => pick.matchId === index
+                                )}
                               />
                             </div>
                           </div>
