@@ -151,16 +151,7 @@ export const playoffs = [
             maxRoundScore: 3,
             startTime: null,
             state: null,
-            participants: [
-              {
-                player: 4,
-                roundScore: 2,
-              },
-              {
-                player: 11,
-                roundScore: 0,
-              },
-            ],
+            participants: [],
           },
           {
             id: 3,
@@ -214,16 +205,7 @@ export const playoffs = [
             maxRoundScore: 3,
             startTime: null,
             state: null,
-            participants: [
-              {
-                player: 1,
-                roundScore: 3,
-              },
-              {
-                player: 6,
-                roundScore: 0,
-              },
-            ],
+            participants: [],
           },
           {
             id: 9,

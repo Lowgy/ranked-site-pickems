@@ -10,13 +10,15 @@ import { Pick } from '../types/picks';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import PlayerDraggable from './player-draggable';
 import PickDroppable from './pick-droppable';
+import { Button } from './ui/button';
+import { Lock } from 'lucide-react';
 
 export default function DragDrop() {
   const [playoff, setPlayoff] = useState(playoffs[0].data.data);
   const [tabHeaders, setTabHeaders] = useState<string[]>([]);
   const [players, setPlayers] = useState<Player[]>([]);
-  const [parent, setParent] = useState<HTMLDivElement | null>(null);
   const [picks, setPicks] = useState<Pick[]>([]);
+  const [picksSaved, setPicksSaved] = useState(false);
 
   const initalData = () => {
     let headers: string[] = [];
@@ -58,75 +60,135 @@ export default function DragDrop() {
   };
 
   const handleDragEnd = (event: any) => {
-    const newPick = event.active.data.current;
-    if (event.over?.id !== 'pick-droppable' || !newPick) return;
-    const temp = [...picks];
-    temp.push(newPick);
-    setPicks(temp);
+    const playerPick = event.active.data.current;
+    for (let i = 0; i < playoff.matches.length; i++) {
+      if (event.over?.id === `pick-droppable-match-${i}`) {
+        const newPick: Pick = {
+          id: picks.length + 1,
+          matchId: i,
+          player: playerPick,
+        };
+        const pickIndex = picks.findIndex(
+          (pick) => pick.matchId === newPick.matchId
+        );
+        if (pickIndex !== -1) {
+          const temp = [...picks];
+          temp[pickIndex] = newPick;
+          setPicks(temp);
+        } else {
+          setPicks((prev) => [...prev, newPick]);
+        }
+      }
+    }
   };
+
+  const handleSaveClick = () => {
+    setPicksSaved(true);
+  };
+
+  const checkRoundMatches = (header: string) => {
+    //check if round matches have participants set
+    let matches = playoff.matches.filter((match) => match.name === header);
+    for (let i = 0; i < matches.length; i++) {
+      if (matches[i].participants.length === 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
+
+  useEffect(() => {
+    setPicksSaved(false);
+  }, [picks]);
 
   useEffect(() => {
     initalData();
   }, []);
 
   return (
-    <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
-      <Tabs defaultValue="Round of 16">
-        <TabsList>
-          {tabHeaders.map((header, index) => {
-            return (
-              <TabsTrigger key={index} value={header}>
-                {header}
-              </TabsTrigger>
-            );
-          })}
-        </TabsList>
+    <Tabs defaultValue="Round of 16">
+      <TabsList>
         {tabHeaders.map((header, index) => {
           return (
-            <TabsContent key={index} value={header}>
-              <div className="flex flex-col w-full text-center bg-gray-600 rounded-lg p-12">
-                <h1 className="pb-4 text-xl">
-                  Get 4 correct picks for the {header}!
-                </h1>
-                <div className="grid grid-cols-4 gap-x-4 gap-y-4">
-                  {playoff.matches
-                    .filter((match) => match.name === header)
-                    .map((match, index) => {
-                      return (
-                        <div
-                          key={index}
-                          className="flex flex-col p-12 border-2 items-center space-y-5 rounded-lg bg-gray-400"
-                        >
-                          <div className="flex flex-row space-x-8">
-                            {match.participants.map((participant, index) => {
-                              return (
-                                <div
-                                  key={index}
-                                  className="flex flex-col items-center text-center"
-                                >
-                                  <PlayerDraggable key={participant.player}>
-                                    {players[participant.player]}
-                                  </PlayerDraggable>
-                                </div>
-                              );
-                            })}
-                          </div>
-                          <div className="flex flex-col text-center items-center border-dashed border-2 border-gray-600 p-4">
-                            <PickDroppable
-                              key={index}
-                              id={index}
-                              picks={picks}
-                            />
-                          </div>
-                        </div>
-                      );
-                    })}
-                </div>
-              </div>
-            </TabsContent>
+            <TabsTrigger
+              key={index}
+              value={header}
+              disabled={checkRoundMatches(header)}
+            >
+              {header}{' '}
+              {checkRoundMatches(header) && <Lock className="ml-2 h-4 w-4" />}
+            </TabsTrigger>
           );
         })}
-      </Tabs>
-    </DndContext>
+      </TabsList>
+      {tabHeaders.map((header, index) => {
+        return (
+          <TabsContent key={index} value={header}>
+            <div className="flex flex-col w-full text-center select-none bg-gray-600 rounded-lg p-10">
+              <div className="flex flex-row items-center justify-between pb-4">
+                <h1 className="text-xl">
+                  Get 4 correct picks for the {header}!
+                </h1>
+                <Button
+                  className={`mt-4 ${
+                    picksSaved
+                      ? 'bg-green-500 disabled:cursor-default disabled:bg-green-500 disabled:opacity-100'
+                      : 'bg-blue-500'
+                  }`}
+                  onClick={handleSaveClick}
+                  disabled={!picks.length || picksSaved}
+                >
+                  {picksSaved ? 'Picks Saved!' : 'Save Picks'}
+                </Button>
+              </div>
+              <div className="grid grid-cols-4 gap-x-4 gap-y-4">
+                {playoff.matches
+                  .filter((match) => match.name === header)
+                  .map((match, index) => {
+                    return (
+                      <>
+                        <DndContext
+                          onDragEnd={handleDragEnd}
+                          collisionDetection={closestCenter}
+                          key={index}
+                        >
+                          <div
+                            key={index}
+                            className="flex flex-col p-12 border-2 items-center space-y-5 rounded-lg bg-gray-400"
+                          >
+                            <h1 className="text-xl">{match.name}</h1>
+                            <div className="flex flex-row space-x-8">
+                              {match.participants.map((participant, index) => {
+                                return (
+                                  <div
+                                    key={index}
+                                    className="flex flex-col items-center text-center"
+                                  >
+                                    <PlayerDraggable key={participant.player}>
+                                      {players[participant.player]}
+                                    </PlayerDraggable>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                            <div className="flex flex-col text-center items-center border-dashed border-2 border-gray-600 p-4">
+                              <PickDroppable
+                                key={index}
+                                id={index}
+                                picks={picks}
+                              />
+                            </div>
+                          </div>
+                        </DndContext>
+                      </>
+                    );
+                  })}
+              </div>
+            </div>
+          </TabsContent>
+        );
+      })}
+    </Tabs>
   );
 }
