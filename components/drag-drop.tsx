@@ -67,6 +67,7 @@ export default function DragDrop() {
           id: picks.length + 1,
           matchId: i,
           player: playerPick,
+          correct: null,
         };
         const pickIndex = picks.findIndex(
           (pick) => pick.matchId === newPick.matchId
@@ -174,15 +175,14 @@ export default function DragDrop() {
                                 );
                               })}
                             </div>
-                            <div className="flex flex-col text-center items-center border-dashed border-2 border-gray-600 p-4">
-                              <PickDroppable
-                                key={index}
-                                id={index}
-                                picks={picks.filter(
-                                  (pick) => pick.matchId === index
-                                )}
-                              />
-                            </div>
+
+                            <PickDroppable
+                              key={index}
+                              id={index}
+                              picks={picks.filter(
+                                (pick) => pick.matchId === index
+                              )}
+                            />
                           </div>
                         </DndContext>
                       </>
