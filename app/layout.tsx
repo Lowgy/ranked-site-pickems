@@ -1,12 +1,22 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
-
-const inter = Inter({ subsets: ['latin'] });
+import { cn } from '@/lib/utils';
+import { fontSans } from '@/lib/fonts';
+import { ThemeProvider } from '@/components/theme-provider';
+import { SiteHeader } from '@/components/site-header';
 
 export const metadata: Metadata = {
   title: 'MCSR Ranked - Pickems',
   description: 'MCSR Ranked - Pickems',
+};
+
+import type { Viewport } from 'next';
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: 'white' },
+    { media: '(prefers-color-scheme: dark)', color: 'black' },
+  ],
 };
 
 export default function RootLayout({
@@ -16,7 +26,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body
+        className={cn(
+          'min-h-screen bg-background font-sans antialiased',
+          fontSans.variable
+        )}
+      >
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <div className="flex flex-col min-h-screen">
+            <SiteHeader />
+            <div className="flex-1">{children}</div>
+          </div>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
