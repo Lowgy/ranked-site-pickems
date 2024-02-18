@@ -21,6 +21,13 @@ export default function DragDrop() {
   const [picksSaved, setPicksSaved] = useState(false);
 
   const initalData = () => {
+    //Check if picks are saved in local storage
+    const savedPicks = localStorage.getItem('picks');
+    if (savedPicks) {
+      setPicks(JSON.parse(savedPicks));
+      setPicksSaved(true);
+    }
+
     let headers: string[] = [];
     let players: Player[] = [];
 
@@ -85,6 +92,7 @@ export default function DragDrop() {
 
   const handleSaveClick = () => {
     setPicksSaved(true);
+    localStorage.setItem('picks', JSON.stringify(picks));
   };
 
   const checkRoundMatches = (header: string) => {
@@ -100,7 +108,9 @@ export default function DragDrop() {
   };
 
   useEffect(() => {
-    setPicksSaved(false);
+    if (localStorage.getItem('picks') !== JSON.stringify(picks)) {
+      setPicksSaved(false);
+    }
   }, [picks]);
 
   useEffect(() => {
