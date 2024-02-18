@@ -4,6 +4,13 @@ export type Participant = {
   playerData?: Player;
 };
 
+export type TableMatch = {
+  id?: number;
+  name?: string;
+  state?: string | null;
+  participants?: Participant[];
+};
+
 export type Player = {
   uuid: string;
   nickname: string;
