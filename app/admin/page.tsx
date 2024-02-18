@@ -54,7 +54,7 @@ export default function Admin() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-12">
+    <main className="h-full flex-col p-12 md:flex justify-center md:mx-64">
       <DataTable columns={columns} data={matches} />
     </main>
   );
