@@ -12,7 +12,98 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+type DialogFormProps = {
+  match: TableMatch;
+};
+
+const DialogForm = ({ match }: DialogFormProps) => {
+  const [open, setOpen] = useState(false);
+  const [selectedPlayer, setSelectedPlayer] = useState<number>(0);
+  const [matchData, setMatchData] = useState<TableMatch | null>(null);
+
+  const handleCorrectPick = (playerId: number) => {
+    console.log(match);
+    setSelectedPlayer(playerId);
+    match.winner = playerId;
+    setMatchData(match);
+  };
+
+  const handleSaveClick = () => {
+    //Save correct picks selections to local storage
+    if (localStorage.getItem('correctPicks') === null) {
+      localStorage.setItem('correctPicks', JSON.stringify([matchData]));
+    } else {
+      const correctPicks = JSON.parse(
+        localStorage.getItem('correctPicks') || '[]'
+      );
+      //check if match already exists in correctPicks and update it
+      const matchIndex = correctPicks.findIndex(
+        (match: TableMatch) => match.id === matchData?.id
+      );
+      if (matchIndex !== -1) {
+        correctPicks[matchIndex] = matchData;
+      } else {
+        correctPicks.push(matchData);
+      }
+      localStorage.setItem('correctPicks', JSON.stringify(correctPicks));
+    }
+    setOpen(false);
+  };
+
+  return (
+    <div className="flex items-center justify-center">
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button variant="ghost">Open</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{match.name} Game</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col items-center text-center">
+            {' '}
+            <div className="flex flex-row mb-4">
+              {match.participants?.map((participant: any) => (
+                <Button
+                  key={participant.playerData?.uuid}
+                  variant="ghost"
+                  className={`flex items-center p-4 ${
+                    selectedPlayer === participant.playerData?.uuid
+                      ? 'bg-green-500'
+                      : ''
+                  }`}
+                  onClick={() =>
+                    handleCorrectPick(participant.playerData?.uuid)
+                  }
+                >
+                  <img
+                    src={`https://crafatar.com/avatars/${participant.playerData?.uuid}?overlay`}
+                    alt={participant.playerData?.nickname}
+                    height={32}
+                    width={32}
+                    className="mr-2 h-8 w-8 rounded-full"
+                    loading="lazy"
+                  />
+                  {participant.playerData?.nickname}
+                </Button>
+              ))}
+            </div>
+            <DialogDescription>Who Won?</DialogDescription>
+          </div>
+          <Button
+            variant={'default'}
+            className="w-full"
+            onClick={handleSaveClick}
+          >
+            Save
+          </Button>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
 
 export const columns: ColumnDef<TableMatch>[] = [
   {
@@ -71,51 +162,8 @@ export const columns: ColumnDef<TableMatch>[] = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      const matchName = row.original.name;
-      const participants: any = [];
-      row.original.participants?.map((participant) => {
-        participants.push(participant);
-      });
-      return (
-        <div className="flex items-center justify-center">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="ghost">Open</Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>{matchName} Game</DialogTitle>
-              </DialogHeader>
-              <div className="flex flex-col items-center text-center">
-                {' '}
-                <div className="flex flex-row">
-                  {participants?.map((participant: any) => (
-                    <Button
-                      key={participant.playerData?.uuid}
-                      variant="ghost"
-                      className="flex items-center p-4"
-                    >
-                      <img
-                        src={`https://crafatar.com/avatars/${participant.playerData?.uuid}?overlay`}
-                        alt={participant.playerData?.nickname}
-                        height={32}
-                        width={32}
-                        className="mr-2 h-8 w-8 rounded-full"
-                        loading="lazy"
-                      />
-                      {participant.playerData?.nickname}
-                    </Button>
-                  ))}
-                </div>
-                <DialogDescription>Who Won?</DialogDescription>
-              </div>
-              <Button variant={'default'} className="w-full">
-                Save
-              </Button>
-            </DialogContent>
-          </Dialog>
-        </div>
-      );
+      const match = row.original;
+      return <DialogForm match={match} />;
     },
   },
 ];

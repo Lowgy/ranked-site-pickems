@@ -20,8 +20,10 @@ export default function DragDrop() {
   const [picks, setPicks] = useState<Pick[]>([]);
   const [picksSaved, setPicksSaved] = useState(false);
 
+  //TODO: Add loader for initial data load
+  //TODO: Check if picks are correct or incorrect on load from correctPicks in localStorage
+  //TODO: Fix admin dialog for choosing correct picks
   const initalData = () => {
-    //Check if picks are saved in local storage
     const savedPicks = localStorage.getItem('picks');
     if (savedPicks) {
       setPicks(JSON.parse(savedPicks));
@@ -68,23 +70,30 @@ export default function DragDrop() {
 
   const handleDragEnd = (event: any) => {
     const playerPick = event.active.data.current;
+    let ids: number[] = [];
     for (let i = 0; i < playoff.matches.length; i++) {
-      if (event.over?.id === `pick-droppable-match-${i}`) {
-        const newPick: Pick = {
-          id: picks.length + 1,
-          matchId: i,
-          player: playerPick,
-          correct: null,
-        };
-        const pickIndex = picks.findIndex(
-          (pick) => pick.matchId === newPick.matchId
-        );
-        if (pickIndex !== -1) {
-          const temp = [...picks];
-          temp[pickIndex] = newPick;
-          setPicks(temp);
-        } else {
-          setPicks((prev) => [...prev, newPick]);
+      ids.push(playoff.matches[i].id);
+    }
+    for (let i = 0; i < playoff.matches.length; i++) {
+      if (event.over?.id === `pick-droppable-match-${i + 1}`) {
+        if (ids.includes(i + 1)) {
+          const newPick: Pick = {
+            id: i + 1,
+            name: `Match #${i + 1}`,
+            matchId: i + 1,
+            player: playerPick,
+            correct: null,
+          };
+          const pickIndex = picks.findIndex(
+            (pick) => pick.matchId === newPick.matchId
+          );
+          if (pickIndex !== -1) {
+            const temp = [...picks];
+            temp[pickIndex] = newPick;
+            setPicks(temp);
+          } else {
+            setPicks((prev) => [...prev, newPick]);
+          }
         }
       }
     }
@@ -96,7 +105,6 @@ export default function DragDrop() {
   };
 
   const checkRoundMatches = (header: string) => {
-    //check if round matches have participants set
     let matches = playoff.matches.filter((match) => match.name === header);
     for (let i = 0; i < matches.length; i++) {
       if (matches[i].participants.length === 0) {
@@ -188,9 +196,9 @@ export default function DragDrop() {
 
                             <PickDroppable
                               key={index}
-                              id={index}
+                              id={match.id}
                               picks={picks.filter(
-                                (pick) => pick.matchId === index
+                                (pick) => pick.matchId === match.id
                               )}
                             />
                           </div>

@@ -212,8 +212,8 @@ export const playoffs = [
             name: 'Round of 16',
             nextMatchId: 5,
             maxRoundScore: 2,
-            startTime: null,
-            state: null,
+            startTime: 1696798800,
+            state: 'SCHEDULED',
             participants: [
               {
                 player: 0,
@@ -230,8 +230,8 @@ export const playoffs = [
             name: 'Round of 16',
             nextMatchId: 5,
             maxRoundScore: 2,
-            startTime: null,
-            state: null,
+            startTime: 1696798800,
+            state: 'SCHEDULED',
             participants: [
               {
                 player: 7,
@@ -248,8 +248,8 @@ export const playoffs = [
             name: 'Round of 16',
             nextMatchId: 6,
             maxRoundScore: 2,
-            startTime: null,
-            state: null,
+            startTime: 1696798800,
+            state: 'SCHEDULED',
             participants: [
               {
                 player: 2,
@@ -266,8 +266,8 @@ export const playoffs = [
             name: 'Round of 16',
             nextMatchId: 6,
             maxRoundScore: 2,
-            startTime: null,
-            state: null,
+            startTime: 1696798800,
+            state: 'SCHEDULED',
             participants: [
               {
                 player: 5,
@@ -284,8 +284,8 @@ export const playoffs = [
             name: 'Round of 16',
             nextMatchId: 7,
             maxRoundScore: 2,
-            startTime: null,
-            state: null,
+            startTime: 1696798800,
+            state: 'SCHEDULED',
             participants: [
               {
                 player: 3,

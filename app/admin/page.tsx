@@ -42,6 +42,7 @@ export default function Admin() {
           name: playoff.matches[i].name,
           state: playoff.matches[i].state,
           participants: playoff.matches[i].participants,
+          winner: null,
         };
         matches.push(match);
       }

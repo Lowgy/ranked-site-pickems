@@ -9,6 +9,7 @@ export type TableMatch = {
   name?: string;
   state?: string | null;
   participants?: Participant[];
+  winner?: number | null;
 };
 
 export type Player = {
