@@ -30,7 +30,7 @@ export default function DragDrop() {
       const correctPicks = JSON.parse(
         localStorage.getItem('correctPicks') as string
       );
-      const tempPicks = [...JSON.parse(savedPicks)];
+      let tempPicks = [...JSON.parse(savedPicks)];
       for (let i = 0; i < correctPicks.length; i++) {
         for (let j = 0; j < tempPicks.length; j++) {
           if (correctPicks[i].id === tempPicks[j].id) {
@@ -43,6 +43,7 @@ export default function DragDrop() {
         }
       }
       setPicks(tempPicks);
+      localStorage.setItem('picks', JSON.stringify(tempPicks));
     } else if (savedPicks !== null) {
       setPicks(JSON.parse(savedPicks));
       setPicksSaved(true);
@@ -137,10 +138,6 @@ export default function DragDrop() {
   useEffect(() => {
     if (localStorage.getItem('picks') !== JSON.stringify(picks)) {
       setPicksSaved(false);
-    }
-    if (picks.length !== 0) {
-      console.log('test');
-      console.log(picks[0].correct);
     }
   }, [picks]);
 
