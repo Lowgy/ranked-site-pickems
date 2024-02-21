@@ -4,10 +4,6 @@ import { useDroppable } from '@dnd-kit/core';
 import { Check, CheckCircle, CheckCircle2, Crown } from 'lucide-react';
 
 export default function PickDroppable(props: any) {
-  const { setNodeRef } = useDroppable({
-    id: `pick-droppable-match-${props.id}`,
-  });
-
   const checkCorrect = () => {
     for (let i = 0; i < props.picks.length; i++) {
       if (props.picks[i].correct === true) {
@@ -17,6 +13,20 @@ export default function PickDroppable(props: any) {
       }
     }
   };
+
+  const checkIfCorrectIsSet = () => {
+    for (let i = 0; i < props.picks.length; i++) {
+      if (props.picks[i].correct !== null) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const { setNodeRef } = useDroppable({
+    id: `pick-droppable-match-${props.id}`,
+    disabled: checkIfCorrectIsSet(),
+  });
 
   return (
     <div

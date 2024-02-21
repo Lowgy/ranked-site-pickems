@@ -24,7 +24,6 @@ const DialogForm = ({ match }: DialogFormProps) => {
   const [matchData, setMatchData] = useState<TableMatch | null>(null);
 
   const handleCorrectPick = (playerId: number) => {
-    console.log(match);
     setSelectedPlayer(playerId);
     match.winner = playerId;
     setMatchData(match);

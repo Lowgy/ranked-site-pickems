@@ -25,7 +25,25 @@ export default function DragDrop() {
   //TODO: Fix admin dialog for choosing correct picks
   const initalData = () => {
     const savedPicks = localStorage.getItem('picks');
-    if (savedPicks) {
+
+    if (localStorage.getItem('correctPicks') !== null && savedPicks) {
+      const correctPicks = JSON.parse(
+        localStorage.getItem('correctPicks') as string
+      );
+      const tempPicks = [...JSON.parse(savedPicks)];
+      for (let i = 0; i < correctPicks.length; i++) {
+        for (let j = 0; j < tempPicks.length; j++) {
+          if (correctPicks[i].id === tempPicks[j].id) {
+            if (correctPicks[i].winner === tempPicks[j].player.uuid) {
+              tempPicks[j].correct = true;
+            } else {
+              tempPicks[j].correct = false;
+            }
+          }
+        }
+      }
+      setPicks(tempPicks);
+    } else if (savedPicks) {
       setPicks(JSON.parse(savedPicks));
       setPicksSaved(true);
     }
@@ -175,7 +193,13 @@ export default function DragDrop() {
                           <div
                             key={index}
                             className={`flex flex-col p-12 border-2 items-center space-y-5 rounded-lg bg-gray-400 w-full ${
-                              picksSaved && 'border-green-500 border-4'
+                              picksSaved && picks?.[index].correct === null
+                                ? 'border-green-500 border-4'
+                                : picks?.[index].correct === true
+                                ? 'border-green-500 border-4'
+                                : picks?.[index].correct === false
+                                ? 'border-red-500 border-4'
+                                : ''
                             }`}
                           >
                             <h1 className="text-xl">Match #{index + 1}</h1>
