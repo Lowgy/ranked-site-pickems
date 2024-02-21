@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
-import { Check, CheckCircle, CheckCircle2, Crown } from 'lucide-react';
+import { CheckCircle, Crown } from 'lucide-react';
 
 export default function PickDroppable(props: any) {
   const checkCorrect = () => {

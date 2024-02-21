@@ -95,6 +95,7 @@ const DialogForm = ({ match }: DialogFormProps) => {
             variant={'default'}
             className="w-full"
             onClick={handleSaveClick}
+            disabled={matchData === null}
           >
             Save
           </Button>

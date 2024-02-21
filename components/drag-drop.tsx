@@ -26,7 +26,7 @@ export default function DragDrop() {
   const initalData = () => {
     const savedPicks = localStorage.getItem('picks');
 
-    if (localStorage.getItem('correctPicks') !== null && savedPicks) {
+    if (localStorage.getItem('correctPicks') !== null && savedPicks !== null) {
       const correctPicks = JSON.parse(
         localStorage.getItem('correctPicks') as string
       );
@@ -43,7 +43,7 @@ export default function DragDrop() {
         }
       }
       setPicks(tempPicks);
-    } else if (savedPicks) {
+    } else if (savedPicks !== null) {
       setPicks(JSON.parse(savedPicks));
       setPicksSaved(true);
     }
@@ -108,6 +108,7 @@ export default function DragDrop() {
           if (pickIndex !== -1) {
             const temp = [...picks];
             temp[pickIndex] = newPick;
+            console.log(temp);
             setPicks(temp);
           } else {
             setPicks((prev) => [...prev, newPick]);
@@ -136,6 +137,10 @@ export default function DragDrop() {
   useEffect(() => {
     if (localStorage.getItem('picks') !== JSON.stringify(picks)) {
       setPicksSaved(false);
+    }
+    if (picks.length !== 0) {
+      console.log('test');
+      console.log(picks[0].correct);
     }
   }, [picks]);
 
@@ -190,15 +195,25 @@ export default function DragDrop() {
                           collisionDetection={closestCenter}
                           key={index}
                         >
+                          {/* picksSaved &&
+                                  (picks[index].correct === null ||
+                                    picks[index].correct === true)
+                                  ? 'border-green-500 border-4'
+                                  : picks && picks[index].correct !== null
+                                  ? 'border-red-500 border-4'
+                                  : '' */}
                           <div
                             key={index}
-                            className={`flex flex-col p-12 border-2 items-center space-y-5 rounded-lg bg-gray-400 w-full ${
-                              picksSaved && picks?.[index].correct === null
-                                ? 'border-green-500 border-4'
-                                : picks?.[index].correct === true
-                                ? 'border-green-500 border-4'
-                                : picks?.[index].correct === false
-                                ? 'border-red-500 border-4'
+                            className={`flex flex-col p-12 border-2 items-center space-y-5 rounded-lg bg-gray-400 w-full   // ${
+                              picks.length !== 0
+                                ? picksSaved
+                                  ? 'border-green-500 border-4'
+                                  : picks[index] &&
+                                    picks[index].correct !== null
+                                  ? picks[index].correct === true
+                                    ? 'border-green-500 border-4'
+                                    : 'border-red-500 border-4'
+                                  : ''
                                 : ''
                             }`}
                           >
