@@ -9,6 +9,7 @@ export type TableMatch = {
   name?: string;
   state?: string | null;
   participants?: Participant[];
+  nextMatchId?: number | string | null;
   winner?: number | null;
 };
 

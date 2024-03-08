@@ -3,16 +3,24 @@
 import { DataTable } from './data-table';
 import { columns } from './columns';
 import { playoffs } from '../data/playoffs';
-import { Player, Participant, TableMatch } from '../../types/playoffs';
+import { Player, Participant, TableMatch, Matches } from '../../types/playoffs';
 import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
 
 export default function Admin() {
-  const playoff = playoffs[0].data.data;
-  const [matches, setMatches] = useState<TableMatch[]>([]);
+  let playoff = playoffs[0].data.data;
+  const [matches, setMatches] = useState<TableMatch[] | Matches[]>([]);
+  const { toast } = useToast();
 
   const initialData = () => {
+    // if (localStorage.getItem('matches') !== null) {
+    //   playoff = JSON.parse(localStorage.getItem('matches') || '{}');
+    // }
     let players: Player[] = [];
     let matches: TableMatch[] = [];
+
+    console.log(playoff);
 
     for (let i = 0; i < playoff.players.length; i++) {
       players.push(playoff.players[i]);
@@ -42,6 +50,7 @@ export default function Admin() {
           name: playoff.matches[i].name,
           state: playoff.matches[i].state,
           participants: playoff.matches[i].participants,
+          nextMatchId: playoff.matches[i].nextMatchId,
           winner: null,
         };
         matches.push(match);
@@ -50,12 +59,31 @@ export default function Admin() {
     return matches;
   };
 
+  const handleResetData = () => {
+    toast({
+      title: 'Picks data has been reset!',
+      variant: 'default',
+    });
+    localStorage.removeItem('picks');
+    localStorage.removeItem('correctPicks');
+    localStorage.removeItem('matches');
+  };
+
   useEffect(() => {
-    setMatches(initialData());
+    if (localStorage.getItem('matches') !== null) {
+      setMatches(JSON.parse(localStorage.getItem('matches') || '[]'));
+    } else {
+      setMatches(initialData());
+    }
   }, []);
 
   return (
     <main className="h-full flex-col p-12 md:flex justify-center md:mx-64">
+      <div className="flex justify-end mb-4">
+        <Button variant={'destructive'} onClick={handleResetData}>
+          Reset Picks Data
+        </Button>
+      </div>
       <DataTable columns={columns} data={matches} />
     </main>
   );

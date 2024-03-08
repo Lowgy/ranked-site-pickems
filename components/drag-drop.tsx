@@ -4,7 +4,7 @@
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { useEffect, useState } from 'react';
 import { playoffs } from '../app/data/playoffs';
-import { Participant, Player } from '../types/playoffs';
+import { Matches, Participant, Player } from '../types/playoffs';
 import { Pick } from '../types/picks';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -15,21 +15,31 @@ import { Lock } from 'lucide-react';
 
 export default function DragDrop() {
   const [playoff, setPlayoff] = useState(playoffs[0].data.data);
+  const [matches, setMatches] = useState<Matches[]>(playoff.matches);
   const [tabHeaders, setTabHeaders] = useState<string[]>([]);
   const [players, setPlayers] = useState<Player[]>([]);
   const [picks, setPicks] = useState<Pick[]>([]);
   const [picksSaved, setPicksSaved] = useState(false);
 
   //TODO: Add loader for initial data load
-  //TODO: Check if picks are correct or incorrect on load from correctPicks in localStorage
-  //TODO: Fix admin dialog for choosing correct picks
+  //TODO: Add dialog on load to explain the project is just for test purposes only and to go to the real site to check it out
+  //TODO: Unlock the next round of matches when the current round is completed
+  //TODO: Add correct picks to the next round of matches.
   const initalData = () => {
+    //save playoff data into local storage
+    if (localStorage.getItem('matches') === null) {
+      localStorage.setItem('matches', JSON.stringify(playoff.matches));
+    }
+
+    setMatches(JSON.parse(localStorage.getItem('matches') || '[]'));
+
     const savedPicks = localStorage.getItem('picks');
 
     if (localStorage.getItem('correctPicks') !== null && savedPicks !== null) {
       const correctPicks = JSON.parse(
         localStorage.getItem('correctPicks') as string
       );
+
       let tempPicks = [...JSON.parse(savedPicks)];
       for (let i = 0; i < correctPicks.length; i++) {
         for (let j = 0; j < tempPicks.length; j++) {
@@ -125,13 +135,23 @@ export default function DragDrop() {
   };
 
   const checkRoundMatches = (header: string) => {
-    let matches = playoff.matches.filter((match) => match.name === header);
-    for (let i = 0; i < matches.length; i++) {
-      if (matches[i].participants.length === 0) {
-        return true;
-      } else {
-        return false;
-      }
+    //get matches from local storage
+    const matches = JSON.parse(localStorage.getItem('matches') || '[]');
+    const filteredByHeader = matches.filter(
+      (match: any) => match.name === header
+    );
+    let participants: number[] = [];
+
+    for (let i = 0; i < filteredByHeader.length; i++) {
+      console.log(filteredByHeader[i].participants.length, filteredByHeader[i]);
+      participants.push(filteredByHeader[i].participants.length);
+    }
+    if (participants.includes(0) || participants.includes(1)) {
+      console.log(participants);
+      return true;
+    } else {
+      console.log(participants);
+      return false;
     }
   };
 
@@ -182,7 +202,7 @@ export default function DragDrop() {
                 </Button>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-x-4 gap-y-4 items-center">
-                {playoff.matches
+                {matches
                   .filter((match) => match.name === header)
                   .map((match, index) => {
                     return (
@@ -192,13 +212,6 @@ export default function DragDrop() {
                           collisionDetection={closestCenter}
                           key={index}
                         >
-                          {/* picksSaved &&
-                                  (picks[index].correct === null ||
-                                    picks[index].correct === true)
-                                  ? 'border-green-500 border-4'
-                                  : picks && picks[index].correct !== null
-                                  ? 'border-red-500 border-4'
-                                  : '' */}
                           <div
                             key={index}
                             className={`flex flex-col p-12 border-2 items-center space-y-5 rounded-lg bg-gray-400 w-full   // ${
@@ -223,7 +236,7 @@ export default function DragDrop() {
                                     className="flex flex-col items-center text-center"
                                   >
                                     <PlayerDraggable key={participant.player}>
-                                      {players[participant.player]}
+                                      {players[participant.player!]}
                                     </PlayerDraggable>
                                   </div>
                                 );

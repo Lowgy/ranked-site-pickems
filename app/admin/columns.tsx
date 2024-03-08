@@ -12,7 +12,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 type DialogFormProps = {
   match: TableMatch;
@@ -48,6 +48,26 @@ const DialogForm = ({ match }: DialogFormProps) => {
       }
       localStorage.setItem('correctPicks', JSON.stringify(correctPicks));
     }
+
+    const matches = JSON.parse(localStorage.getItem('matches') || '[]');
+    for (let i = 0; i < matches.length; i++) {
+      if (matches[i].id === matchData?.id) {
+        matches[i].state = 'DONE';
+        matches[matches[i].nextMatchId].state = 'SCHEDULED';
+        for (let j = 0; j < matches[i].participants.length; j++)
+          if (
+            matches[i].participants[j].playerData.uuid === matchData?.winner
+          ) {
+            //update next match with winner based on matchData.nextMatchId
+            matches[matches[i].nextMatchId - 1].participants.push({
+              player: matches[i].participants[j].player,
+              playerData: matches[i].participants[j].playerData,
+              roundScore: 0,
+            });
+          }
+      }
+    }
+    localStorage.setItem('matches', JSON.stringify(matches));
     setOpen(false);
   };
 
