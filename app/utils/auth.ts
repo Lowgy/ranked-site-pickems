@@ -14,9 +14,14 @@ export const authOptions = {
   ],
 
   callbacks: {
-    signIn: ({ user, account, profile }) => {
-      console.log('signIn', { user, account, profile });
+    signIn: async ({ user, account, profile }) => {
       return true;
+    },
+    async session({ session, token, user }) {
+      return Promise.resolve(session);
+    },
+    jwt: async (token: any) => {
+      return Promise.resolve(token);
     },
   },
 } satisfies NextAuthOptions;

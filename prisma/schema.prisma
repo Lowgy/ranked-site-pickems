@@ -23,13 +23,15 @@ model User {
   updatedAt             DateTime   @updatedAt
   accounts              Account[]
   sessions              Session[]
+  minecraftUUID         String?
   picks Pick[]
   @@map("users")
 }
+
 model Account {
   id                 String    @id @default(cuid())
   userId              String    @map("user_id")
-  type                 String?
+  type                String?
   provider           String
   providerAccountId  String    @map("provider_account_id")
   token_type         String?
