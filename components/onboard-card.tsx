@@ -4,30 +4,32 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Input } from './ui/input';
 import ConnectMinecraft from '@/components/connect-minecraft';
 import SignInWithTwitch from '@/components/twitch-signin';
 
-export default function OnBoardModal() {
+export default function OnBoardCard() {
   const { data: session } = useSession();
   const [authToken, setAuthToken] = useState<string>('');
 
   return (
-    <Dialog defaultOpen={true}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Welcome to MCSRanked Pickems!</DialogTitle>
-          <DialogDescription>
-            This is a simple app to allow you to pick the winners of each ranked
-            season playoffs! (Similar to the CS Major pickems).
-          </DialogDescription>
-        </DialogHeader>
+    <Card className="mx-auto max-w-lg">
+      <CardHeader>
+        <CardTitle className="text-2xl">
+          Welcome to MCSRanked Pickems!
+        </CardTitle>
+        <CardDescription>
+          This is a simple app to allow you to pick the winners of each ranked
+          season playoffs! (Similar to the CS Major pickems).
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
         <div className="flex flex-col justify-center text-center gap-y-2">
           {session ? (
             <>
@@ -59,7 +61,7 @@ export default function OnBoardModal() {
             <SignInWithTwitch />
           )}
         </div>
-      </DialogContent>
-    </Dialog>
+      </CardContent>
+    </Card>
   );
 }

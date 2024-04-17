@@ -1,6 +1,8 @@
 'use client';
 import { Button } from './ui/button';
 import { Swords } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { useToast } from '@/components/ui/use-toast';
 
 export default function ConnectMinecraft({
   disabled,
@@ -9,18 +11,26 @@ export default function ConnectMinecraft({
   disabled: boolean;
   token: string;
 }) {
-  console.log(token);
+  const { data: session } = useSession();
+  const { toast } = useToast();
+
   const handleUpdateUser = async () => {
-    // Update user
     const res = await fetch('/api/user', {
       method: 'POST',
-      body: JSON.stringify({ token }),
+      body: JSON.stringify({ token, email: session?.user?.email }),
       headers: {
         'Content-Type': 'application/json',
       },
     });
     const data = await res.json();
-    console.log(data);
+    if (data.success && data.redirectURL) {
+      window.location.href = data.redirectURL;
+    } else {
+      toast({
+        description: 'Failed to connect Minecraft account!',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
