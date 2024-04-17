@@ -10,8 +10,18 @@ const OnBoardCard = dynamic(() => import('@/components/onboard-card'), {
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
+  const user = session?.user?.email;
   if (session) {
-    return redirect('/pickems');
+    const res = await fetch(process.env.URL + `/api/user/${user}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await res.json();
+    if (data.user.minecraftUUID) {
+      redirect('/pickems');
+    }
   }
 
   return (
