@@ -4,15 +4,14 @@ import { TwitchProfile } from 'next-auth/providers/twitch';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import type { Adapter } from 'next-auth/adapters';
 import prisma from './db';
-import { randomBytes, randomUUID } from 'crypto';
-
-let userData = {};
+import { randomUUID } from 'crypto';
 
 export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   adapter: PrismaAdapter(prisma) as Adapter,
   session: {
     strategy: 'jwt',
+    maxAge: 60 * 60 * 2,
   },
   providers: [
     TwitchProvider({
@@ -25,6 +24,7 @@ export const authOptions = {
           role: profile.role ?? 'user',
         };
       },
+      allowDangerousEmailAccountLinking: true,
       clientId: process.env.TWITCH_CLIENT_ID as string,
       clientSecret: process.env.TWITCH_CLIENT_SECRET as string,
     }),

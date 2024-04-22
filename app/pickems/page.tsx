@@ -1,13 +1,17 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
 
 export default function Pickems() {
   const { data: session } = useSession({
     required: true,
-    // onUnauthenticated: () => redirect('/'),
   });
 
-  return <div>pickems</div>;
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-black">
+      <div>
+        <h1>Pickems</h1>
+      </div>
+    </main>
+  );
 }

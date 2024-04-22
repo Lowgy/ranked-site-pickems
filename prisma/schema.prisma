@@ -93,6 +93,7 @@ model Participant {
 model Match {
   id Int @id @default(autoincrement())
   name String
+  season Int
   nextMatchId Int?
   startTime DateTime?
   state MatchState
