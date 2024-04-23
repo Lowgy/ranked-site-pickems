@@ -1,6 +1,6 @@
 'use client';
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Download, MoreHorizontal, Plus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -33,11 +33,28 @@ export function MatchesTable() {
   const [showManual, setShowManual] = useState(false);
   const [showAPI, setShowAPI] = useState(false);
 
+  const resetFlags = () => {
+    setShowManual(false);
+    setShowAPI(false);
+  };
+
+  const fetchMatches = async () => {
+    const response = await fetch('/api/match', {
+      method: 'GET',
+    });
+    const data = await response.json();
+    console.log(data);
+  };
+
+  useEffect(() => {
+    fetchMatches();
+  }, []);
+
   return (
     <Card>
       <CardHeader className="flex flex-row justify-between">
         <CardTitle>Matches</CardTitle>
-        <Dialog>
+        <Dialog onOpenChange={() => resetFlags()}>
           <DialogTrigger asChild>
             <Button>Populate Matches</Button>
           </DialogTrigger>

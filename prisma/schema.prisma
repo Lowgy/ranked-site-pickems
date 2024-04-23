@@ -92,11 +92,12 @@ model Participant {
 
 model Match {
   id Int @id @default(autoincrement())
+  matchID String @unique
   name String
   season Int
   nextMatchId Int?
-  startTime DateTime?
-  state MatchState
+  startTime Int?
+  state MatchState?
   participants Participant[]
   winner String?
   picks Pick[]

@@ -1,3 +1,5 @@
+import prisma from '@/app/utils/db';
+
 export default async function populateMatches() {
   const response = await fetch('https://mcsrranked.com/api/playoffs', {
     cache: 'no-cache',
@@ -8,6 +10,12 @@ export default async function populateMatches() {
   }
 
   const data = await response.json();
-  console.log(data.data);
-  return data.data;
+  const matchData = await fetch('/api/match', {
+    method: 'POST',
+    body: JSON.stringify(data.data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return matchData;
 }

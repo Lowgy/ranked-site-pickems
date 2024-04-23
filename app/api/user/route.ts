@@ -6,7 +6,6 @@ import prisma from '@/app/utils/db';
 
 export async function POST(req: Request) {
   const data = await req.json();
-  console.log(data.token, data.email);
   const uuid = await fetch(
     `https://auth.aristois.net/token/${data.token}`
   ).then((res) => res.json().then((data) => data.uuid));

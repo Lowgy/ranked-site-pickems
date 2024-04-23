@@ -10,6 +10,7 @@ type Props = {
 export function ApiMatches({ setShowAPI }: Props) {
   const retrieveMatches = async () => {
     let matches = await populateMatches();
+    console.log(matches);
   };
 
   return (
