@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { CircleCheckBig, CircleX, MousePointerClick } from 'lucide-react';
 import { UsersTable } from '@/components/admin/users-table';
+import { MatchesTable } from '@/components/admin/matches/matches-table';
 
 export default function Admin() {
   return (
@@ -60,7 +61,9 @@ export default function Admin() {
                 <RecentPicksTable />
               </div>
             </TabsContent>
-            <TabsContent value="matches" className="space-y-4"></TabsContent>
+            <TabsContent value="matches" className="space-y-4">
+              <MatchesTable />
+            </TabsContent>
             <TabsContent value="users" className="space-y-4">
               <UsersTable />
             </TabsContent>
