@@ -1,5 +1,3 @@
-import prisma from '@/app/utils/db';
-
 export default async function populateMatches() {
   const response = await fetch('https://mcsrranked.com/api/playoffs', {
     cache: 'no-cache',

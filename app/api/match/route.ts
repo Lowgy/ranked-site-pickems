@@ -6,6 +6,13 @@ export async function GET() {
     orderBy: {
       season: 'asc',
     },
+    include: {
+      participants: {
+        include: {
+          participant: true,
+        },
+      },
+    },
   });
 
   return NextResponse.json(matches);
@@ -13,6 +20,8 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const data = await req.json();
+
+  const players = data.data.players;
 
   for (let i = 0; i < data.data.matches.length; i++) {
     const match = await prisma.match.findUnique({
@@ -28,6 +37,36 @@ export async function POST(req: Request) {
       });
     }
     if (!match) {
+      const participant1 = await prisma.participant.upsert({
+        where: {
+          name: players[data.data.matches[i].participants[0].player].nickname,
+        },
+        update: {
+          name: players[data.data.matches[i].participants[0].player].nickname,
+        },
+        create: {
+          name: players[data.data.matches[i].participants[0].player].nickname,
+          uuid: players[data.data.matches[i].participants[0].player].uuid,
+          seedNumber:
+            players[data.data.matches[i].participants[0].player].seedNumber + 1,
+        },
+      });
+
+      const participant2 = await prisma.participant.upsert({
+        where: {
+          name: players[data.data.matches[i].participants[1].player].nickname,
+        },
+        update: {
+          name: players[data.data.matches[i].participants[1].player].nickname,
+        },
+        create: {
+          name: players[data.data.matches[i].participants[1].player].nickname,
+          uuid: players[data.data.matches[i].participants[1].player].uuid,
+          seedNumber:
+            players[data.data.matches[i].participants[1].player].seedNumber + 1,
+        },
+      });
+
       const match = await prisma.match.create({
         data: {
           matchID: `s${data.data.season}-${data.data.matches[i].id}`,
@@ -36,6 +75,12 @@ export async function POST(req: Request) {
           nextMatchId: data.data.matches[i].nextMatchId,
           startTime: data.data.matches[i].startTime || null,
           state: data.data.matches[i].state || null,
+          participants: {
+            create: [
+              { participantId: participant1.id },
+              { participantId: participant2.id },
+            ],
+          },
         },
       });
     }
