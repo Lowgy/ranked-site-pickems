@@ -28,14 +28,18 @@ import {
 } from '@/components/ui/table';
 import { ApiMatches } from '@/components/admin/matches/api-matches';
 import { ManualMatches } from '@/components/admin/matches/manual-matches';
+import { DataTable } from '@/app/admin/data-table';
+import { columns } from '@/app/admin/columns';
 
 export function MatchesTable() {
   const [showManual, setShowManual] = useState(false);
   const [showAPI, setShowAPI] = useState(false);
+  const [matches, setMatches] = useState([]);
 
   const resetFlags = () => {
     setShowManual(false);
     setShowAPI(false);
+    fetchMatches();
   };
 
   const fetchMatches = async () => {
@@ -44,6 +48,7 @@ export function MatchesTable() {
     });
     const data = await response.json();
     console.log(data);
+    setMatches(data);
   };
 
   useEffect(() => {
@@ -89,7 +94,7 @@ export function MatchesTable() {
         </Dialog>
       </CardHeader>
       <CardContent>
-        <Table>
+        {/* <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Participants</TableHead>
@@ -131,7 +136,8 @@ export function MatchesTable() {
               </TableCell>
             </TableRow>
           </TableBody>
-        </Table>
+        </Table> */}
+        <DataTable columns={columns} data={matches} />
       </CardContent>
     </Card>
   );

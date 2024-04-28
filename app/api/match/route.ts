@@ -75,6 +75,12 @@ export async function POST(req: Request) {
           nextMatchId: data.data.matches[i].nextMatchId,
           startTime: data.data.matches[i].startTime || null,
           state: data.data.matches[i].state || null,
+          winner:
+            data.data.matches[i].participants[0].roundScore >
+            data.data.matches[i].participants[1].roundScore
+              ? players[data.data.matches[i].participants[0].player].nickname
+              : players[data.data.matches[i].participants[1].player].nickname ||
+                null,
           participants: {
             create: [
               { participantId: participant1.id },
