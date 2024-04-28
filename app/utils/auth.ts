@@ -29,7 +29,9 @@ export const authOptions = {
       clientSecret: process.env.TWITCH_CLIENT_SECRET as string,
     }),
   ],
-
+  pages: {
+    signIn: '/',
+  },
   callbacks: {
     signIn: async ({ user, account, profile }) => {
       return true;
