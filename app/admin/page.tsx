@@ -1,10 +1,10 @@
 'use client';
 
-import { RecentPicksTable } from '@/components/admin/recent-picks-table';
+import { RecentPicksTable } from '@/components/admin/picks/recent-picks-table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { CircleCheckBig, CircleX, MousePointerClick } from 'lucide-react';
-import { UsersTable } from '@/components/admin/users-table';
+import { UsersTable } from '@/components/admin/users/users-table';
 import { MatchesTable } from '@/components/admin/matches/matches-table';
 
 export default function Admin() {

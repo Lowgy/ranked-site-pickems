@@ -28,8 +28,8 @@ import {
 } from '@/components/ui/table';
 import { ApiMatches } from '@/components/admin/matches/api-matches';
 import { ManualMatches } from '@/components/admin/matches/manual-matches';
-import { DataTable } from '@/app/admin/data-table';
-import { columns } from '@/app/admin/columns';
+import { DataTable } from '@/components/admin/matches/data-table';
+import { columns } from '@/components/admin/matches/columns';
 
 export function MatchesTable() {
   const [showManual, setShowManual] = useState(false);
