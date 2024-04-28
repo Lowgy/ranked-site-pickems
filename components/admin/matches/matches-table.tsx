@@ -1,8 +1,7 @@
 'use client';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Download, MoreHorizontal, Plus } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Download, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -12,20 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { ApiMatches } from '@/components/admin/matches/api-matches';
 import { ManualMatches } from '@/components/admin/matches/manual-matches';
 import { DataTable } from '@/components/admin/matches/data-table';
@@ -94,49 +79,6 @@ export function MatchesTable() {
         </Dialog>
       </CardHeader>
       <CardContent>
-        {/* <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Participants</TableHead>
-              <TableHead>Round</TableHead>
-              <TableHead className="hidden md:table-cell">Status</TableHead>
-              <TableHead className="hidden md:table-cell">Winner</TableHead>
-              <TableHead className="hidden md:table-cell">Start Time</TableHead>
-              <TableHead>
-                <span className="sr-only">Actions</span>
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">Feinberg vs MoleyG</TableCell>
-              <TableCell className="hidden md:table-cell">
-                Round of 16
-              </TableCell>
-              <TableCell>
-                <Badge variant="outline">Scheduled</Badge>
-              </TableCell>
-              <TableCell className="hidden md:table-cell">Feinberg</TableCell>
-              <TableCell className="hidden md:table-cell">
-                2023-07-12 10:42 AM
-              </TableCell>
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button aria-haspopup="true" size="icon" variant="ghost">
-                      <MoreHorizontal className="h-4 w-4" />
-                      <span className="sr-only">Toggle menu</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
-                    <DropdownMenuItem>Delete</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table> */}
         <DataTable columns={columns} data={matches} />
       </CardContent>
     </Card>

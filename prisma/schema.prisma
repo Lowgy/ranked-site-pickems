@@ -24,6 +24,7 @@ model User {
   accounts              Account[]
   sessions              Session[]
   minecraftUUID         String?
+  minecraftUsername     String?
   picks Pick[]
   role                  String?   @default("USER")
   @@map("users")

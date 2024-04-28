@@ -24,7 +24,7 @@ export function RecentPicksTable() {
         </div>
       </CardHeader>
       <CardContent>
-        <Table>
+        {/* <Table>
           <TableHeader>
             <TableRow>
               <TableHead>User</TableHead>
@@ -62,7 +62,7 @@ export function RecentPicksTable() {
               <TableCell className="text-right">Feinberg</TableCell>
             </TableRow>
           </TableBody>
-        </Table>
+        </Table> */}
       </CardContent>
     </Card>
   );
