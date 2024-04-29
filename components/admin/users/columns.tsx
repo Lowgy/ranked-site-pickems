@@ -1,15 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { ColumnDef } from '@tanstack/react-table';
-
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Ellipsis } from 'lucide-react';
-import { uuidToUsername } from '@/lib/utils';
+import { UserDialogs } from '@/components/admin/users/users-dialog';
 
 export type User = {
   id: string;
@@ -87,19 +78,7 @@ export const columns: ColumnDef<User>[] = [
   {
     id: 'actions',
     cell: (row) => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Button variant="ghost">
-              <Ellipsis />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem className="text-red-500">Delete</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return <UserDialogs data={row} />;
     },
   },
 ];
