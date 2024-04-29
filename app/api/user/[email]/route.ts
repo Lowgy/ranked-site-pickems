@@ -13,3 +13,12 @@ export async function GET(req: Request, { params }: { params: Email }) {
   });
   return NextResponse.json({ user, success: true });
 }
+
+export async function DELETE(req: Request, { params }: { params: Email }) {
+  const user = await prisma.user.delete({
+    where: {
+      email: params.email,
+    },
+  });
+  return NextResponse.json({ user, success: true });
+}

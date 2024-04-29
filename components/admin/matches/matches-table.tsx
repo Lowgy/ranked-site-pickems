@@ -58,8 +58,10 @@ export function MatchesTable() {
                   className="flex w-[45%] h-full border-dashed border-2 flex-col gap-y-2"
                   variant="outline"
                   onClick={() => setShowManual(true)}
+                  disabled={true}
                 >
-                  Manually Add
+                  Add Manually
+                  <p className="text-xs">(Coming Soon)</p>
                   <Plus className="h-6 w-6" />
                 </Button>
                 <h1>Or</h1>

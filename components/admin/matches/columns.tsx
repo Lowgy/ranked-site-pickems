@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/tooltip';
 import { Ellipsis } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { MatchDialogs } from './matches-dialog';
 
 export type Match = {
   participants: any[];
@@ -158,19 +159,7 @@ export const columns: ColumnDef<Match>[] = [
   {
     id: 'actions',
     cell: (row) => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Button variant="ghost">
-              <Ellipsis />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem className="text-red-500">Delete</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return <MatchDialogs data={row} />;
     },
   },
 ];

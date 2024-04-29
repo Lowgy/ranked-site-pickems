@@ -25,19 +25,19 @@ import {
 import { Button } from '@/components/ui/button';
 import { Ellipsis } from 'lucide-react';
 
-export function UserDialogs({ data }: any) {
+export function MatchDialogs({ data }: any) {
   const editDialog = useDialog();
   const deleteDialog = useDialog();
   const { toast } = useToast();
 
-  const handleUserDelete = async () => {
-    const response = await fetch(`/api/user/${data.row.original.email}`, {
+  const handleMatchDelete = async () => {
+    const response = await fetch(`/api/match/${data.row.original.matchID}`, {
       method: 'DELETE',
     });
     if (response.ok) {
       toast({
-        title: 'User Deleted',
-        description: 'User has been deleted successfully',
+        title: 'Match Deleted',
+        description: 'Match has been deleted successfully',
       });
       deleteDialog.dismiss();
     }
@@ -52,7 +52,7 @@ export function UserDialogs({ data }: any) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem onClick={editDialog.trigger}>Edit</DropdownMenuItem>
+          {/* <DropdownMenuItem onClick={editDialog.trigger}>Edit</DropdownMenuItem> */}
           <DropdownMenuItem
             className="text-red-500"
             onClick={deleteDialog.trigger}
@@ -64,9 +64,9 @@ export function UserDialogs({ data }: any) {
       <Dialog {...editDialog.props}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Edit User</DialogTitle>
+            <DialogTitle>Edit Match</DialogTitle>
             <DialogDescription>
-              Make changes to a users role here. Click save to apply changes.
+              Make changes to a match role here. Click save to apply changes.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -96,13 +96,13 @@ export function UserDialogs({ data }: any) {
       <Dialog {...deleteDialog.props}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Delete User</DialogTitle>
+            <DialogTitle>Delete Match</DialogTitle>
             <DialogDescription>
               Are you sure? This is IRREVERSIBLE!
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant={'destructive'} onClick={handleUserDelete}>
+            <Button variant={'destructive'} onClick={handleMatchDelete}>
               Delete
             </Button>
             <Button onClick={deleteDialog.dismiss}>Cancel</Button>
