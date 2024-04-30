@@ -34,7 +34,7 @@ export function UsersTable() {
         <CardDescription>Manage users and their roles.</CardDescription>
       </CardHeader>
       <CardContent>
-        <DataTable columns={columns} data={users} />
+        <DataTable columns={columns} data={users} fetchUsers={fetchUsers} />
       </CardContent>
     </Card>
   );

@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Ellipsis } from 'lucide-react';
+import { EditUserForm } from './edit-user-form';
 
 export function UserDialogs({ data }: any) {
   const editDialog = useDialog();
@@ -69,28 +70,7 @@ export function UserDialogs({ data }: any) {
               Make changes to a users role here. Click save to apply changes.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Role
-              </Label>
-              <Select>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select Role..." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="admin">Admin</SelectItem>
-                  <SelectItem value="user">User</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button className="bg-green-500 text-white hover:bg-green-600">
-              Save changes
-            </Button>
-            <Button onClick={editDialog.dismiss}>Cancel</Button>
-          </DialogFooter>
+          <EditUserForm editDialog={editDialog} data={data} />
         </DialogContent>
       </Dialog>
       <Dialog {...deleteDialog.props}>
