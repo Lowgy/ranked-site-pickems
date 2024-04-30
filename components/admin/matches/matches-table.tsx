@@ -19,9 +19,11 @@ import { columns } from '@/components/admin/matches/columns';
 export function MatchesTable() {
   const [showManual, setShowManual] = useState(false);
   const [showAPI, setShowAPI] = useState(false);
+  const [open, setOpen] = useState(false);
   const [matches, setMatches] = useState([]);
 
-  const resetFlags = () => {
+  const resetDialog = () => {
+    setOpen(!open);
     setShowManual(false);
     setShowAPI(false);
     fetchMatches();
@@ -44,7 +46,7 @@ export function MatchesTable() {
     <Card>
       <CardHeader className="flex flex-row justify-between">
         <CardTitle>Matches</CardTitle>
-        <Dialog onOpenChange={() => resetFlags()}>
+        <Dialog open={open} onOpenChange={() => resetDialog()}>
           <DialogTrigger asChild>
             <Button>Populate Matches</Button>
           </DialogTrigger>
@@ -75,13 +77,19 @@ export function MatchesTable() {
                 </Button>
               </div>
             )}
-            {showAPI && <ApiMatches setShowAPI={setShowAPI} />}
+            {showAPI && (
+              <ApiMatches setShowAPI={setShowAPI} resetDialog={resetDialog} />
+            )}
             {showManual && <ManualMatches setShowManual={setShowManual} />}
           </DialogContent>
         </Dialog>
       </CardHeader>
       <CardContent>
-        <DataTable columns={columns} data={matches} />
+        <DataTable
+          columns={columns}
+          data={matches}
+          fetchMatches={fetchMatches}
+        />
       </CardContent>
     </Card>
   );

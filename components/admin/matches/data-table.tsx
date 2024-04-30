@@ -26,11 +26,13 @@ import { Button } from '@/components/ui/button';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  fetchMatches: () => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  fetchMatches,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -44,6 +46,9 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     state: {
       columnFilters,
+    },
+    meta: {
+      fetchMatches,
     },
   });
 

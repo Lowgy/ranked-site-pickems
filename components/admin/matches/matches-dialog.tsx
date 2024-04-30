@@ -25,7 +25,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { Ellipsis } from 'lucide-react';
 
-export function MatchDialogs({ data }: any) {
+type Props = {
+  data: any;
+};
+
+export function MatchDialogs({ data }: Props) {
   const editDialog = useDialog();
   const deleteDialog = useDialog();
   const { toast } = useToast();
@@ -35,12 +39,14 @@ export function MatchDialogs({ data }: any) {
       method: 'DELETE',
     });
     if (response.ok) {
+      deleteDialog.dismiss();
       toast({
         title: 'Match Deleted',
         description: 'Match has been deleted successfully',
+        variant: 'success',
       });
-      deleteDialog.dismiss();
     }
+    data.table.options.meta.fetchMatches();
   };
 
   return (
