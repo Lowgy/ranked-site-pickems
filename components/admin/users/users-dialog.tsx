@@ -39,6 +39,7 @@ export function UserDialogs({ data }: any) {
       toast({
         title: 'User Deleted',
         description: 'User has been deleted successfully',
+        variant: 'success',
       });
       deleteDialog.dismiss();
     }
