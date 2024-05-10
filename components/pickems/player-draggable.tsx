@@ -15,7 +15,7 @@ export function PlayerDraggable(props: any) {
       style={{ transform: CSS.Translate.toString(transform) }}
       {...listeners}
       {...attributes}
-      className="flex flex-col items-center text-center z-50"
+      className="flex flex-col items-center text-center z-40"
     >
       <img
         src={`https://crafatar.com/avatars/${props.children.uuid}?overlay`}
