@@ -76,11 +76,12 @@ model VerificationRequest {
 
 model Pick {
   id Int @id @default(autoincrement())
-  user User @relation(fields: [userId], references: [id])
-  userId String
+  user User @relation(fields: [userEmail], references: [email])
+  userEmail String
   winner String
-  matchId Int @unique
-  matchDetails Match @relation(fields: [matchId], references: [id])
+  uuid String
+  matchId String @unique
+  matchDetails Match @relation(fields: [matchId], references: [matchID])
 }
 
 model Participant {
