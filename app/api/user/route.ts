@@ -28,6 +28,9 @@ export async function POST(req: Request) {
       minecraftUUID: uuid,
       minecraftUsername: mcUserName,
     },
+    include: {
+      picks: true,
+    },
   });
 
   return NextResponse.json({ user, success: true, redirectURL: '/pickems' });
