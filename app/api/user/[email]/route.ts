@@ -10,6 +10,9 @@ export async function GET(req: Request, { params }: { params: Email }) {
     where: {
       email: params.email,
     },
+    include: {
+      picks: true,
+    },
   });
   return NextResponse.json({ user, success: true });
 }

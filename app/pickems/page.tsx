@@ -16,10 +16,27 @@ export default function Pickems() {
   });
 
   const fetchMatches = async () => {
-    const res = await fetch('/api/match');
+    const res = await fetch('/api/match', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
     const data = await res.json();
     setMatches(data);
   };
+
+  // const fetchUserPicks = async () => {
+  //   const res = await fetch(`/api/pick/logybear222@gmail.com`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   });
+  //   const data = await res.json();
+  //   console.log('test');
+  //   setUserPicks(data.picks);
+  // };
 
   const handleDragEnd = (event: any) => {
     const playerPick = event.active.data.current;
@@ -58,6 +75,7 @@ export default function Pickems() {
 
   useEffect(() => {
     fetchMatches();
+    // fetchUserPicks();
   }, []);
 
   useEffect(() => {
@@ -66,28 +84,34 @@ export default function Pickems() {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-x-4 gap-y-4 items-center">
-        <DndContext
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          {matches.map((match, index) => (
-            <PickComponent match={match} key={index} picks={userPicks} />
-          ))}
-        </DndContext>
-      </div>
-      <div className="flex flex-col md:flex-row items-center pb-4">
-        <Button
-          className={`mt-4 ${
-            picksSaved
-              ? 'bg-green-500 disabled:cursor-default disabled:bg-green-500 disabled:opacity-100'
-              : 'bg-blue-500'
-          }`}
-          onClick={handleSaveClick}
-        >
-          {picksSaved ? 'Picks Saved!' : 'Save Picks'}
-        </Button>
-      </div>
+      {matches.length !== 0 ? (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-x-4 gap-y-4 items-center">
+            <DndContext
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              {matches.map((match, index) => (
+                <PickComponent match={match} key={index} picks={userPicks} />
+              ))}
+            </DndContext>
+          </div>
+          <div className="flex flex-col md:flex-row items-center pb-4">
+            <Button
+              className={`mt-4 ${
+                picksSaved
+                  ? 'bg-green-500 disabled:cursor-default disabled:bg-green-500 disabled:opacity-100'
+                  : 'bg-blue-500'
+              }`}
+              onClick={handleSaveClick}
+            >
+              {picksSaved ? 'Picks Saved!' : 'Save Picks'}
+            </Button>
+          </div>
+        </>
+      ) : (
+        <h1>No Matches available currently!</h1>
+      )}
     </>
   );
 }
